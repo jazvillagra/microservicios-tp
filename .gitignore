@@ -37,3 +37,25 @@ build/
 
 ### VS Code ###
 .vscode/
+
+.classpath
+.idea/*
+.project
+.settings
+.settings/*
+target/
+*.iml
+**/*.iml
+/build/
+out.txt
+*.lck
+*.log
+*.script
+*.out
+/scripts/demo_db.sh
+/scripts/tomcat_deploy.sh
+/src/main/resources/stagemonitor.properties
+run-tests.sh
+.mvn/
+.gradle/
+gradle/
