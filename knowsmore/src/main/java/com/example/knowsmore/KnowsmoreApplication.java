@@ -1,4 +1,4 @@
-package com.example.configurationservice;
+package com.example.knowsmore;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,9 +8,9 @@ import org.springframework.cloud.config.server.EnableConfigServer;
 @EnableConfigServer
 @SpringBootApplication
 @EnableDiscoveryClient
-public class ConfigurationServiceApplication {
+public class KnowsmoreApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ConfigurationServiceApplication.class, args);
+		SpringApplication.run(KnowsmoreApplication.class, args);
 	}
 }
