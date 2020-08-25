@@ -1,0 +1,59 @@
+version: '3.3'
+services:
+  gandalf:
+    container_name: gandalf
+    build:
+        context: ./gandalf
+        dockerfile: Dockerfile
+    image: 'microservicios-tp/gandalf'
+    ports:
+      - '8761:8761'
+    networks:
+      - micro
+    environment:
+            - "spring.cloud.config.uri=http://knowsmore:8888/"
+            - "SPRING_PROFILES_ACTIVE=dev"
+
+  knowsmore:
+    container_name: knowsmore
+    image: 'microservicios-tp/knowsmore'
+    build:
+      context: ./knowsmore
+      dockerfile: Dockerfile
+    ports:
+      - '8888:8888'
+    links:
+      - gandalf:gandalf
+    networks:
+      - micro
+    environment:
+      - "WAIT_HOSTS=gandalf:8761"
+      - "WAIT_HOSTS_TIMEOUT=300"
+
+  golden:
+    container_name: golden
+    image: 'microservicios-tp/golden'
+    build:
+      context: ./golden
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    depends_on:
+      - knowsmore
+      - gandalf
+    links:
+      - gandalf:gandalf
+      - knowsmore:knowsmore
+    networks:
+      - micro
+    environment:
+      - "spring.cloud.config.uri=http://knowsmore:8888/"
+      - "SPRING_PROFILES_ACTIVE=dev"
+      - "WAIT_HOSTS=knowsmore:8888,gandalf:8761"
+      - "WAIT_HOSTS_TIMEOUT=300"
+
+networks:
+  micro:
+    driver: bridge
+
+
