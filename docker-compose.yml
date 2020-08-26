@@ -14,9 +14,10 @@ services:
             - "spring.cloud.config.uri=http://knowsmore:8888/"
             - "SPRING_PROFILES_ACTIVE=dev"
             - "spring.zipkin.base-url=http://localhost:9411/"
+            - "spring.zipkin.base-url=http://kangaroo:9411/"
 
-  zipkin:
-    container_name: zipkin
+  kangaroo:
+    container_name: kangaroo
     image: 'openzipkin/zipkin'
     ports:
       - '9411:9411'
@@ -39,7 +40,7 @@ services:
       - "WAIT_HOSTS=gandalf:8761"
       - "WAIT_HOSTS_TIMEOUT=300"
       - "eureka.client.service-url.defaultZone=http://gandalf:8761/eureka"
-      - "spring.zipkin.base-url=http://zipkin:9411/"
+      - "spring.zipkin.base-url=http://kangaroo:9411/"
 
   golden:
     container_name: golden
@@ -60,7 +61,7 @@ services:
     environment:
       - "spring.cloud.config.uri=http://knowsmore:8888/"
       - "eureka.client.service-url.defaultZone=http://gandalf:8761/eureka"
-      - "spring.zipkin.base-url=http://zipkin:9411/"
+      - "spring.zipkin.base-url=http://kangaroo:9411/"
       - "SPRING_PROFILES_ACTIVE=dev"
       - "WAIT_HOSTS=knowsmore:8888,gandalf:8761"
       - "WAIT_HOSTS_TIMEOUT=300"
