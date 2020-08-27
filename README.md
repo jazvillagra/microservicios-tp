@@ -1,6 +1,6 @@
 # microservicios-tp
-* gandalf = Eureka
-* Knowsmore = Config-Server
-* kangaroo = zipkin-server
-* Golden = microservice
-* Arquimedes = api-gateway
+* gandalf = Eureka Server
+* knowsmore = Config Server
+* kangaroo = Microservice - 2 instancias con balanceo de carga
+* golden = Microservice - 1 instancia
+* arquimedes = Api Gateway

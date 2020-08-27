@@ -13,16 +13,6 @@ services:
     environment:
             - "spring.cloud.config.uri=http://knowsmore:8888/"
             - "SPRING_PROFILES_ACTIVE=dev"
-            - "spring.zipkin.base-url=http://localhost:9411/"
-            - "spring.zipkin.base-url=http://kangaroo:9411/"
-
-  kangaroo:
-    container_name: kangaroo
-    image: 'openzipkin/zipkin'
-    ports:
-      - '9411:9411'
-    networks:
-      - micro
 
   knowsmore:
     container_name: knowsmore
@@ -40,7 +30,6 @@ services:
       - "WAIT_HOSTS=gandalf:8761"
       - "WAIT_HOSTS_TIMEOUT=300"
       - "eureka.client.service-url.defaultZone=http://gandalf:8761/eureka"
-      - "spring.zipkin.base-url=http://kangaroo:9411/"
 
   golden:
     container_name: golden
@@ -61,11 +50,73 @@ services:
     environment:
       - "spring.cloud.config.uri=http://knowsmore:8888/"
       - "eureka.client.service-url.defaultZone=http://gandalf:8761/eureka"
-      - "spring.zipkin.base-url=http://kangaroo:9411/"
       - "SPRING_PROFILES_ACTIVE=dev"
       - "WAIT_HOSTS=knowsmore:8888,gandalf:8761"
       - "WAIT_HOSTS_TIMEOUT=300"
 
+  kangaroo:
+    container_name: kangaroo
+    image: 'microservicios-tp/kangaroo'
+    build:
+      context: ./kangaroo
+      dockerfile: Dockerfile
+    ports:
+      - '8081:8081'
+    depends_on:
+      - knowsmore
+      - gandalf
+    links:
+      - gandalf:gandalf
+      - knowsmore:knowsmore
+    networks:
+      - micro
+    environment:
+      - "spring.cloud.config.uri=http://knowsmore:8888/"
+      - "eureka.client.service-url.defaultZone=http://gandalf:8761/eureka"
+      - "SPRING_PROFILES_ACTIVE=dev"
+      - "WAIT_HOSTS=knowsmore:8888,gandalf:8761"
+      - "WAIT_HOSTS_TIMEOUT=300"
+
+  kangaroo-twin:
+    container_name: kangaroo-twin
+    image: 'microservicios-tp/kangaroo'
+    depends_on:
+      - knowsmore
+      - gandalf
+      - kangaroo
+    links:
+      - gandalf:gandalf
+      - knowsmore:knowsmore
+    networks:
+      - micro
+    environment:
+      - "spring.cloud.config.uri=http://knowsmore:8888/"
+      - "eureka.client.service-url.defaultZone=http://gandalf:8761/eureka"
+      - "SPRING_PROFILES_ACTIVE=dev"
+      - "WAIT_HOSTS=knowsmore:8888,gandalf:8761"
+      - "WAIT_HOSTS_TIMEOUT=300"
+
+  arquimedes:
+    container_name: arquimedes
+    build:
+      context: ./arquimedes
+      dockerfile: Dockerfile
+    image: 'microservicios-tp/arquimedes'
+    links:
+      - gandalf:gandalf
+      - knowsmore:knowsmore
+      - golden:golden
+      - kangaroo:kangaroo
+    ports:
+      - '8181:8181'
+    networks:
+      - micro
+    environment:
+      - "spring.cloud.config.uri=http://knowsmore:8888/"
+      - "eureka.client.service-url.defaultZone=http://gandalf:8761/eureka"
+      - "SPRING_PROFILES_ACTIVE=dev"
+      - "WAIT_HOSTS=knowsmore:8888,gandalf:8761"
+      - "WAIT_HOSTS_TIMEOUT=300"
 
 networks:
   micro:

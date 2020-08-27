@@ -1,5 +1,5 @@
 #!/bin/bash
-PROJECTS=" gandalf golden knowsmore"
+PROJECTS=" gandalf golden knowsmore kangaroo arquimedes"
 WORKING_DIR=$PWD
 for PRO in $PROJECTS; do
 	cd $PRO
