@@ -1,12 +1,14 @@
 package com.example.kangaroo.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Arrays;
 
 public class PersonaDTO {
     private String id;
     private String nombres;
     private String apellidos;
-    private byte[] imagen;
+    private MultipartFile imagen;
 
     public String getId() {
         return id;
@@ -32,21 +34,21 @@ public class PersonaDTO {
         this.apellidos = apellidos;
     }
 
-    public byte[] getImagen() {
+    public MultipartFile getImagen() {
         return imagen;
     }
 
-    public void setImagen(byte[] imagen) {
+    public void setImagen(MultipartFile imagen) {
         this.imagen = imagen;
     }
 
     @Override
     public String toString() {
         return "PersonaDTO{" +
-                "nombres='" + nombres + '\'' +
+                "id='" + id + '\'' +
+                ", nombres='" + nombres + '\'' +
                 ", apellidos='" + apellidos + '\'' +
-                ", id='" + id + '\'' +
-                ", imagen=" + Arrays.toString(imagen) +
+                ", imagen=" + imagen +
                 '}';
     }
 }

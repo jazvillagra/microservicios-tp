@@ -8,6 +8,7 @@ import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,30 +31,33 @@ public class BolsaController {
     /**
      * Registra una persona en el sistema y retorna el objeto de la Persona
      *
-     * @param personaDTO Datos de la Persona que se registrará en el sistema
+     * @param  id ID único
+     * @param  nombres Nombres de la nueva persona
+     * @param  apellidos Apellidos de la nueva persona
+     * @param  imagen Imagen de un tamaño máximo de 500kB
      */
     @PostMapping("/persona/registrar")
-    public PersonaDTO registrarPersona(@RequestBody PersonaDTO personaDTO) throws Exception {
+    public PersonaDTO registrarPersona(@RequestParam("id") String id,
+                                       @RequestParam("nombres") String nombres,
+                                       @RequestParam("apellidos") String apellidos,
+                                       @RequestParam("imagen") MultipartFile imagen) throws Exception {
+        PersonaDTO personaDTO = new PersonaDTO();
+        personaDTO.setId(id);
+        personaDTO.setNombres(nombres);
+        personaDTO.setApellidos(apellidos);
+        personaDTO.setImagen(imagen);
+
         // Validación
-        if (personaDTO.getId() == null) {
-            throw new Exception("Campo 'id' en el Body es obligatorio");
-        }
         if (personaDTO.getId().length() > 10 || personaDTO.getId().length() < 1) {
             LOGGER.error("Campo 'id' debe tener una longitud entre 1 y 10 caracteres");
             throw new Exception("Campo 'id' debe tener una longitud entre 1 y 10 caracteres");
         }
 
-        if (personaDTO.getNombres() == null) {
-            throw new Exception("Campo 'nombres' en el Body es obligatorio");
-        }
         if (personaDTO.getNombres().length() > 100 || personaDTO.getNombres().length() < 1) {
             LOGGER.error("Campo 'nombres' debe tener una longitud entre 1 y 100 caracteres");
             throw new Exception("Campo 'nombres' debe tener una longitud entre 1 y 100 caracteres");
         }
 
-        if (personaDTO.getApellidos() == null) {
-            throw new Exception("Campo 'apellidos' en el Body es obligatorio");
-        }
         if (personaDTO.getApellidos().length() > 200 || personaDTO.getApellidos().length() < 1) {
             LOGGER.error("Campo 'apellidos' debe tener una longitud entre 1 y 200 caracteres");
             throw new Exception("Campo 'apellidos' debe tener una longitud entre 1 y 200 caracteres");

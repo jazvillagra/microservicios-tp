@@ -42,7 +42,7 @@ public class PersonaServiceImpl implements PersonaService {
         personaDTO.setId(id);
         personaDTO.setApellidos("Apellidos Prueba");
         personaDTO.setNombres("Nombres Prueba");
-        personaDTO.setImagen(new byte[0]);
+        personaDTO.setImagen(null);
 
         return personaDTO.toString();
     }
